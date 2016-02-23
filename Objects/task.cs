@@ -166,7 +166,7 @@ namespace ToDoList
         foundTaskId = rdr.GetInt32(0);
         foundTaskDescription = rdr.GetString(1);
         foundTaskCategoryId = rdr.GetInt32(2);
-        foundDueDate = rdr.GetString(3);
+        foundDueDate = rdr.GetDateTime(3).ToString();
       }
       Task foundTask = new Task(foundTaskDescription, foundTaskCategoryId, foundDueDate, foundTaskId);
 
