@@ -47,15 +47,19 @@ namespace ToDoList
 
       Post["/tasks/new"] = _ =>
       {
+        string date = Request.Form["task-date"];
+        Console.WriteLine(date);
         Task newTask = new Task(Request.Form["task-description"], Request.Form["category-id"], Request.Form["task-date"].ToString());
         newTask.Save();
         return View["success.cshtml"];
       };
+
       Post["/tasks/delete"] = _ =>
       {
       Task.DeleteAll();
       return View["cleared.cshtml"];
       };
+
       Get["/categories/{id}"] = parameters => {
         Dictionary<string, object> model = new Dictionary<string, object>();
         var SelectedCategory = Category.Find(parameters.id);
@@ -64,6 +68,7 @@ namespace ToDoList
         model.Add("tasks", CategoryTasks);
         return View["category.cshtml", model];
       };
+
       Post["/categories/delete"] = _ =>
       {
         Category.DeleteAll();
