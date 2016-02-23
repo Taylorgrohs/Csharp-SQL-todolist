@@ -64,6 +64,12 @@ namespace ToDoList
         model.Add("tasks", CategoryTasks);
         return View["category.cshtml", model];
       };
+      Post["/categories/delete"] = _ =>
+      {
+        Category.DeleteAll();
+        Task.DeleteAll();
+        return View["cleared.cshtml"];
+      };
     }
   }
 }
