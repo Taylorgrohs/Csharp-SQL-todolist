@@ -9,14 +9,23 @@ namespace ToDoList
   private int _id;
   private string _description;
   private int _categoryId;
+  private string _duedate;
 
-  public Task(string Description, int CategoryId, int Id = 0)
+  public Task(string Description, int CategoryId, string DueDate, int Id = 0)
   {
     _id = Id;
     _description = Description;
     _categoryId = CategoryId;
+    _duedate = DueDate;
   }
-
+    public string GetDueDate()
+    {
+      return _duedate;
+    }
+    public void SetDueDate(string newDueDate)
+    {
+      _duedate = newDueDate;
+    }
     public int GetId()
     {
       return _id;
@@ -80,7 +89,8 @@ namespace ToDoList
         int taskId = rdr.GetInt32(0);
         string taskDescription = rdr.GetString(1);
         int taskCategoryId = rdr.GetInt32(2);
-        Task newTask = new Task(taskDescription, taskCategoryId, taskId);
+        string taskDueDate = rdr.GetString(3);
+        Task newTask = new Task(taskDescription, taskCategoryId, taskDueDate, taskId);
         AllTasks.Add(newTask);
       }
       if (rdr != null)
@@ -99,7 +109,7 @@ namespace ToDoList
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO tasks (description, category_id) OUTPUT INSERTED.id VALUES (@TaskDescription, @TaskCategoryId);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO tasks (description, category_id, duedate) OUTPUT INSERTED.id VALUES (@TaskDescription, @TaskCategoryId, @DueDate);", conn);
 
       SqlParameter descriptionParameter = new SqlParameter();
       descriptionParameter.ParameterName = "@TaskDescription";
@@ -109,6 +119,11 @@ namespace ToDoList
       categoryIdParameter.ParameterName = "@TaskCategoryId";
       categoryIdParameter.Value = this.GetCategoryId();
 
+      SqlParameter duedateParameter = new SqlParameter();
+      duedateParameter.ParameterName = "@DueDate";
+      duedateParameter.Value = this.GetDueDate();
+
+      cmd.Parameters.Add(duedateParameter);
       cmd.Parameters.Add(descriptionParameter);
       cmd.Parameters.Add(categoryIdParameter);
 
@@ -144,14 +159,16 @@ namespace ToDoList
       int foundTaskId = 0;
       string foundTaskDescription = null;
       int foundTaskCategoryId = 0;
+      string foundDueDate = null;
 
       while(rdr.Read())
       {
         foundTaskId = rdr.GetInt32(0);
         foundTaskDescription = rdr.GetString(1);
         foundTaskCategoryId = rdr.GetInt32(2);
+        foundDueDate = rdr.GetString(3);
       }
-      Task foundTask = new Task(foundTaskDescription, foundTaskCategoryId, foundTaskId);
+      Task foundTask = new Task(foundTaskDescription, foundTaskCategoryId, foundDueDate, foundTaskId);
 
       if (rdr != null)
       {
