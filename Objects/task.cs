@@ -9,20 +9,20 @@ namespace ToDoList
   private int _id;
   private string _description;
   private int _categoryId;
-  private string _duedate;
+  private DateTime _duedate;
 
-  public Task(string Description, int CategoryId, string DueDate, int Id = 0)
+  public Task(string Description, int CategoryId, DateTime DueDate, int Id = 0)
   {
     _id = Id;
     _description = Description;
     _categoryId = CategoryId;
     _duedate = DueDate;
   }
-    public string GetDueDate()
+    public DateTime GetDueDate()
     {
-      return _duedate;
+    return _duedate;
     }
-    public void SetDueDate(string newDueDate)
+    public void SetDueDate(DateTime newDueDate)
     {
       _duedate = newDueDate;
     }
@@ -89,7 +89,7 @@ namespace ToDoList
         int taskId = rdr.GetInt32(0);
         string taskDescription = rdr.GetString(1);
         int taskCategoryId = rdr.GetInt32(2);
-        string taskDueDate = rdr.GetDateTime(3).ToString();
+        DateTime taskDueDate = rdr.GetDateTime(3).Date;
         Task newTask = new Task(taskDescription, taskCategoryId, taskDueDate, taskId);
         AllTasks.Add(newTask);
       }
@@ -159,14 +159,14 @@ namespace ToDoList
       int foundTaskId = 0;
       string foundTaskDescription = null;
       int foundTaskCategoryId = 0;
-      string foundDueDate = null;
-
+      DateTime foundDueDate = new DateTime();
+      
       while(rdr.Read())
       {
         foundTaskId = rdr.GetInt32(0);
         foundTaskDescription = rdr.GetString(1);
         foundTaskCategoryId = rdr.GetInt32(2);
-        foundDueDate = rdr.GetDateTime(3).ToString();
+        foundDueDate = rdr.GetDateTime(3).Date;
       }
       Task foundTask = new Task(foundTaskDescription, foundTaskCategoryId, foundDueDate, foundTaskId);
 

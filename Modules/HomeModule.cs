@@ -49,7 +49,7 @@ namespace ToDoList
       {
         string date = Request.Form["task-date"];
         Console.WriteLine(date);
-        Task newTask = new Task(Request.Form["task-description"], Request.Form["category-id"], Request.Form["task-date"].ToString());
+        Task newTask = new Task(Request.Form["task-description"], Request.Form["category-id"], Request.Form["task-date"]);
         newTask.Save();
         return View["success.cshtml"];
       };
